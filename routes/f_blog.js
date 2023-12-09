@@ -10,9 +10,17 @@ const router = express.Router();
 //비동기
 router.get('/:author', async (req, res) =>{
     console.log(req.params.author);
-
-    //현재 user객체
-    const user = req.session.user;
+    let user;
+    
+    //로그인X
+    if(!(req.session.user)){
+        user = null;
+      }
+      else{
+        //현재 user객체
+        user = req.session.user;  
+    }
+    
     //내 친구 저장 변수
     let myfriends = [];
 
@@ -22,13 +30,16 @@ router.get('/:author', async (req, res) =>{
     let friends = [];
 
     const mydb = req.app.locals.mydb;
-
+    let userResult = "";
 
     try {
-        //내 아이디로 찾기
-        const userResult = await mydb.collection('account').findOne({ userid: user.userid});
-        //내 친구 데이터 저장
-        myfriends = userResult.friends || [];
+        
+        if(user != null){
+            //내 아이디로 찾기
+            userResult = await mydb.collection('account').findOne({ userid: user.userid});
+            //내 친구 데이터 저장
+            myfriends = userResult.friends || [];
+        }
 
         //글쓴이 아이디로 찾기
         const accountResult = await mydb.collection('account').findOne({ userid: author});

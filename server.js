@@ -42,6 +42,7 @@ const friendRouter = require('./routes/friends_list');
 const logoutRouter = require('./routes/logout');
 const addRouter = require('./routes/add');
 const f_dRouter = require('./routes/f_delete');
+const d_Router = require('./routes/delete');
 
 const subRouter = require('./routes/submit');
 const mypetRouter = require('./routes/mypet');
@@ -52,7 +53,6 @@ const app = express();
 
 //pug 템플릿 엔진 설정
 app.set('view engine', 'pug'); 
-//app.set('port', process.env.PORT || 8080);
 
 // 정적 파일 제공
 app.use('/', express.static(path.join(__dirname, 'public')));
@@ -79,6 +79,7 @@ app.use("/friends_list", friendRouter);
 app.use("/logout", logoutRouter);
 app.use("/add_friend", addRouter);
 app.use("/delete_friend", f_dRouter);
+app.use("/delete", d_Router);
 
 app.use('/submit', subRouter)
 app.use('/mypet', mypetRouter);

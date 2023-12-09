@@ -21,7 +21,8 @@ html(lang="en")
         script(src="https://code.jquery.com/jquery-3.6.4.min.js")
         script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js")
     body
-        h1 글 작성하기
+        div.titlename.text-center
+            h1 글 작성하기
         .container.mt-4
             form(action="/enter/save", method="post")
                 div.form-group

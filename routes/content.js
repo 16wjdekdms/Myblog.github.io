@@ -10,11 +10,19 @@ router.get("/:id", function (req, res) {
     const mydb = req.app.locals.mydb;
     console.log(req.params.id);
     let new_id = new ObjId(req.params.id);
-
+    let userid;
     //user객체
     const user = req.session.user;
-    //사용자 아이디 저장 변수
-    let userid = req.session.user.userid;
+    
+    //로그인X
+    if(!(req.session.user)){
+      userid = "";
+    }
+    else{
+      //사용자 아이디 저장 변수
+      userid = req.session.user.userid;   
+    }
+     
 
     if(userid === undefined){
         userid = '';

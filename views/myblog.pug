@@ -24,7 +24,7 @@ html(lang="en")
         div.titlename.text-center
 
             //내 블로그인 경우
-            if user.userid == author
+            if user !=null && user.userid == author
                 h1.display-4.mb-4 My Blog
             else
                 h1.display-4.mb-4= author + ' 님 블로그'
@@ -64,24 +64,38 @@ html(lang="en")
                                                 tr
                                                     td: a(href=`/content/${item._id}`) #{item.title}
                                                     td= item.date
+                                                    //삭제 버튼
+                                                    td: button.delete.btn.btn-outline-danger(data-id=item._id) 삭제
                             //해당 유저인 경우만 글쓰기 가능
-                            if user.userid == author
-                                button.btn.btn-primary(type="submit" onclick="move_enter()") 글쓰기
+                            if user != null && user.userid == author
+                                button.write.btn.btn-primary(type="submit") 글쓰기
                             //아닌 경우 중 친구목록에 없는 경우
-                            if user.userid != author && !(myfriends.includes(author))
-                                //친구추가
+                            if user != null && user.userid != author && !(myfriends.includes(author))
+                                //친구추가 버튼
                                 td: button.add.btn.btn-outline-danger(data-id=userResult._id, data-new=author) 친구추가
                                      
 
                     ol-md-2i
         
-        //버튼 클릭 함수 정의
-        script.
-            function move_enter() {
-                window.open('enter', '_self');
-            }
+        
         script(src="https://code.jquery.com/jquery-3.6.4.min.js")
         script.
+            //글쓰기 버튼 클릭 함수 정의
+            $('.write').click(function(e) {
+                console.log('추가!'); 
+                    $.ajax({
+                        type: 'get',
+                        url: '/enter',
+                    }).done(function(result) {
+                        location.href = '/enter';
+                    }).fail(function(xhr, textStatus, errorThrown) {
+                        // 응답에 실패했을 때
+                        console.log('글쓰기 실패');
+                        console.log(xhr, textStatus, errorThrown);
+                    });
+                    
+            });
+            //친구추가 버튼 클릭 함수 정의
             $('.add').click(function(e) {
                 console.log('추가!'); 
                     let sid = e.target.dataset.id;
@@ -93,10 +107,30 @@ html(lang="en")
                         data: {_id: sid, new_friend: new_f}
                     }).done(function(result) {
                         // 응답에 성공했을 때
-                        location.reload();
                     }).fail(function(xhr, textStatus, errorThrown) {
                         // 응답에 실패했을 때
                         console.log('친구 추가 실패');
+                        console.log(xhr, textStatus, errorThrown);
+                    });
+                    
+            });
+
+            //삭제 버튼 클릭 함수 정의
+            $('.delete').click(function(e) {
+                console.log('추가!'); 
+                    let sid = e.target.dataset.id;
+                    let item = $(this);
+                    $.ajax({
+                        type: 'post',
+                        url: '/delete',
+                        data: {_id: sid}
+                    }).done(function(result) {
+                        // 응답에 성공했을 때
+                        item.parent('td').parent('tr').remove();
+                        location.reload();
+                    }).fail(function(xhr, textStatus, errorThrown) {
+                        // 응답에 실패했을 때
+                        console.log('삭제 실패');
                         console.log(xhr, textStatus, errorThrown);
                     });
                     
