@@ -49,7 +49,7 @@ html(lang="en")
         div.background-container
             //친구
             div.information
-                p=userid+ '추가하고 싶으면 해라' 
+                p=userid+ '님 친구 가능 리스트' 
             
             //친구 리스트 테이블
             .table_form
@@ -57,13 +57,13 @@ html(lang="en")
                     thead
                         tr
                             th(scope="col") 아이디
-                            th 블로그
+                            th 추가
                     tbody
                         each item in data
                             tr
+                                //내 account가 아니고 친구목록에 없는 경우
                                 if userid != item.userid && !(friends.includes(item.userid))
                                     td= item.userid 
-                                    td.blog_link: a(href=href=`/f_blog/${name}`) #{name}님의 blog
                                     //친구추가 버튼
                                     td: button.add.btn.btn-outline-danger(data-id=userResult._id, data-new=item.userid) 친구추가
         

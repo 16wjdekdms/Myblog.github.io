@@ -4,7 +4,7 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 
-//이미지 저장될 경로 설정
+//저장될 경로 설정
 const storage = multer.diskStorage({
     //destination 함수: 파일이 저장될 디렉토리 설정
     destination(req, file, done) {
@@ -24,6 +24,7 @@ const upload = multer({ storage: storage });
 //라우터 객체
 const router = express.Router();
 
+//첨부된 문서의 내용 저장
 let documentContent = '';
 
 router.get('/', (req, res) => {
@@ -32,7 +33,7 @@ router.get('/', (req, res) => {
 
 router.post('/save', function(req, res){
     const mydb = req.app.locals.mydb;
-    let text_content;
+    let text_content; //첨부 문서 내용 저장
     // 호출되는 시간 기록
     let now = new Date();
     userid = req.session.user.userid;
@@ -40,7 +41,7 @@ router.post('/save', function(req, res){
         text_content = documentContent;
     }
 
-    text_content = text_content+ '<br>' + req.body.content;
+    text_content = text_content+ "\n" + req.body.content;
     console.log(req.body.title);
     console.log(req.body.content);
   

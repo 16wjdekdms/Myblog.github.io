@@ -64,8 +64,11 @@ html(lang="en")
                                                 tr
                                                     td: a(href=`/content/${item._id}`) #{item.title}
                                                     td= item.date
-                                                    //삭제 버튼
-                                                    td: button.delete.btn.btn-outline-danger(data-id=item._id) 삭제
+                                                    //해당 유저인 경우만 삭제
+                                                    if user != null && user.userid == author
+                                                        //삭제 버튼
+                                                        td: button.delete.btn.btn-outline-danger(data-id=item._id) 삭제
+                                                    
                             //해당 유저인 경우만 글쓰기 가능
                             if user != null && user.userid == author
                                 button.write.btn.btn-primary(type="submit") 글쓰기
@@ -107,6 +110,7 @@ html(lang="en")
                         data: {_id: sid, new_friend: new_f}
                     }).done(function(result) {
                         // 응답에 성공했을 때
+                        location.reload();
                     }).fail(function(xhr, textStatus, errorThrown) {
                         // 응답에 실패했을 때
                         console.log('친구 추가 실패');
